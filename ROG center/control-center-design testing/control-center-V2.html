@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROG Control Center</title>
+    <style>
+        :root {
+            --accent: #00aaff;
+            --accent-dark: #0088cc;
+            --bg-dark: #0f131a;
+            --bg-darker: #0a0d12;
+            --bg-component: #1a1f28;
+            --bg-component-hover: #1f2530;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a8c0;
+            --text-tertiary: #6b7280;
+            --border: #2a3240;
+            --border-light: #343d4e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 8px;
+            --radius-sm: 4px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 14px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .app-name {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .app-name::before {
+            content: "";
+            display: block;
+            width: 24px;
+            height: 24px;
+            background-color: var(--accent);
+            border-radius: 4px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        @media (max-width: 880px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Component Styling */
+        .component {
+            background-color: var(--bg-component);
+            border-radius: var(--radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .component:hover {
+            border-color: var(--border-light);
+        }
+
+        .component-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .component-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Segmented Controls */
+        .segmented-control {
+            display: flex;
+            background-color: var(--bg-darker);
+            border-radius: var(--radius);
+            padding: 3px;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--border);
+        }
+
+        .segmented-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .segmented-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .segmented-option.active {
+            background-color: var(--accent);
+            color: var(--bg-darker);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Buttons */
+        .button {
+            background-color: var(--accent);
+            color: var(--bg-darker);
+            border: none;
+            border-radius: var(--radius);
+            padding: 10px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .button:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        .button.secondary {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .button.secondary:hover {
+            background-color: var(--bg-component-hover);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        .button.tertiary {
+            background-color: transparent;
+            color: var(--accent);
+            border: none;
+            padding: 8px 12px;
+            font-weight: 500;
+        }
+
+        .button.tertiary:hover {
+            background-color: rgba(0, 170, 255, 0.1);
+        }
+
+        /* Status Chips */
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: var(--bg-darker);
+            color: var(--text-secondary);
+        }
+
+        .status-chip.applied {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .status-chip.pending {
+            background-color: var(--warning);
+            color: var(--bg-darker);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: var(--warning);
+            color: var(--bg-darker);
+            margin-left: var(--spacing-sm);
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .radio-option:hover {
+            background-color: var(--bg-component-hover);
+        }
+
+        .radio-input {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .radio-input:checked {
+            border-color: var(--accent);
+        }
+
+        .radio-input:checked::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent);
+        }
+
+        /* Slider */
+        .slider-container {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .slider {
+            width: 100%;
+            height: 24px;
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        .slider::-webkit-slider-track {
+            height: 6px;
+            background: var(--bg-darker);
+            border-radius: 3px;
+            border: 1px solid var(--border);
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            margin-top: -7px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .slider-value {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-xs);
+        }
+
+        /* Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-switch {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-darker);
+            transition: var(--transition);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .slider-switch:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider-switch {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        input:checked + .slider-switch:before {
+            transform: translateX(20px);
+        }
+
+        /* Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .table th, .table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tr:hover td {
+            background-color: var(--bg-component-hover);
+        }
+
+        /* Info Lines */
+        .info-line {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-sm);
+            line-height: 1.4;
+        }
+
+        /* Action Row */
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--spacing-md);
+        }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            background-color: var(--bg-darker);
+            border-radius: var(--radius);
+            padding: 3px;
+            border: 1px solid var(--border);
+        }
+
+        .mode-option {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .mode-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .mode-option.active {
+            background-color: var(--accent);
+            color: var(--bg-darker);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--bg-darker);
+            color: var(--text-primary);
+            text-align: center;
+            border-radius: var(--radius);
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Focus styles */
+        button:focus-visible, 
+        input:focus-visible, 
+        .segmented-option:focus-visible,
+        .radio-option:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Section divider */
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: var(--spacing-lg) 0;
+        }
+
+        /* Metric display */
+        .metric-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .metric {
+            background-color: var(--bg-darker);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .metric-detail {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: var(--spacing-xs);
+        }
+
+        /* Checkbox */
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .checkbox input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+        }
+
+        /* Compact controls */
+        .compact-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-name">ROG Control Center</div>
+            <div class="header-controls">
+                <div class="mode-toggle">
+                    <div class="mode-option active">Simple</div>
+                    <div class="mode-option">Pro</div>
+                </div>
+                <button class="button tertiary">Settings</button>
+                <button class="button tertiary">Help</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Profiles -->
+                <div class="component">
+                    <div class="component-header">
+                        <div class="component-title">Performance Profiles</div>
+                        <div class="status-chip applied">Applied</div>
+                    </div>
+                    <div class="segmented-control">
+                        <div class="segmented-option tooltip">
+                            Silent
+                            <span class="tooltip-text">Quiet operation with reduced performance</span>
+                        </div>
+                        <div class="segmented-option active tooltip">
+                            Balanced
+                            <span class="tooltip-text">Balanced performance and noise</span>
+                        </div>
+                        <div class="segmented-option tooltip">
+                            Performance
+                            <span class="tooltip-text">Maximum performance with higher fan speeds</span>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <button class="button secondary">Undo</button>
+                        <button class="button">Apply Profile</button>
+                    </div>
+                </div>
+
+                <!-- Graphics (GPU) -->
+                <div class="component">
+                    <div class="component-header">
+                        <div class="component-title">Graphics Mode</div>
+                    </div>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" class="radio-input" name="gpu-mode" checked>
+                            <span>Integrated Graphics</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" class="radio-input" name="gpu-mode">
+                            <span>Hybrid Mode</span>
+                            <div class="badge">Reboot Required</div>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" class="radio-input" name="gpu-mode">
+                            <span>Dedicated GPU</span>
+                            <div class="badge">Reboot Required</div>
+                        </label>
+                    </div>
+                    <div class="info-line">Currently active: Integrated Graphics</div>
+                    <div class="compact-controls">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            <span>Switch on next restart</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Battery Care -->
+                <div class="component">
+                    <div class="component-header">
+                        <div class="component-title">Battery Care</div>
+                    </div>
+                    <div class="segmented-control">
+                        <div class="segmented-option active">Limit to 80%</div>
+                        <div class="segmented-option">Limit to 90%</div>
+                        <div class="segmented-option">Full Capacity</div>
+                    </div>
+                    <div class="compact-controls">
+                        <label class="checkbox">
+                            <input type="checkbox" disabled>
+                            <span style="color: var(--text-tertiary);">Charge to 100% once</span>
+                        </label>
+                    </div>
+                    <div class="info-line">Extends battery lifespan by limiting maximum charge level.</div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Fans -->
+                <div class="component">
+                    <div class="component-header">
+                        <div class="component-title">Fan Control</div>
+                    </div>
+                    <div class="segmented-control">
+                        <div class="segmented-option">Quiet</div>
+                        <div class="segmented-option active">Balanced</div>
+                        <div class="segmented-option">Turbo</div>
+                    </div>
+                    
+                    <div class="metric-display">
+                        <div class="metric">
+                            <div class="metric-label">CPU Temperature</div>
+                            <div class="metric-value">65°C</div>
+                            <div class="metric-detail">2100 RPM</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">GPU Temperature</div>
+                            <div class="metric-value">58°C</div>
+                            <div class="metric-detail">1800 RPM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-row">
+                        <div></div>
+                        <button class="button tertiary">Custom Fan Curves</button>
+                    </div>
+                </div>
+
+                <!-- Keyboard/RGB -->
+                <div class="component">
+                    <div class="component-header">
+                        <div class="component-title">Keyboard Lighting</div>
+                    </div>
+                    <div class="compact-controls">
+                        <span>Enable Lighting</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider-switch"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm);">
+                            <span>Brightness Level</span>
+                            <span class="slider-value">75%</span>
+                        </div>
+                        <input type="range" min="0" max="100" value="75" class="slider">
+                    </div>
+                    
+                    <div class="action-row">
+                        <div></div>
+                        <button class="button tertiary">Advanced Lighting</button>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="component">
+                    <div class="component-header">
+                        <div class="component-title">Recent Activity</div>
+                        <button class="button tertiary">View All</button>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Action</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10:24 AM</td>
+                                <td>Performance profile changed</td>
+                                <td><span class="status-chip applied">Applied</span></td>
+                            </tr>
+                            <tr>
+                                <td>09:45 AM</td>
+                                <td>GPU mode changed</td>
+                                <td><span class="status-chip pending">Reboot Required</span></td>
+                            </tr>
+                            <tr>
+                                <td>Yesterday</td>
+                                <td>Battery charge limit set</td>
+                                <td><span class="status-chip applied">Limited to 80%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Segmented controls
+            const segmentedOptions = document.querySelectorAll('.segmented-option');
+            segmentedOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const parent = this.parentElement;
+                    if (parent.classList.contains('segmented-control')) {
+                        parent.querySelectorAll('.segmented-option').forEach(child => {
+                            child.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                    }
+                });
+            });
+
+            // Mode toggle
+            const modeOptions = document.querySelectorAll('.mode-option');
+            modeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    modeOptions.forEach(child => {
+                        child.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+
+            // Slider value display
+            const slider = document.querySelector('.slider');
+            const sliderValue = document.querySelector('.slider-value');
+            if (slider && sliderValue) {
+                slider.addEventListener('input', function() {
+                    sliderValue.textContent = `${this.value}%`;
+                });
+            }
+
+            // Add subtle animations to components on load
+            const components = document.querySelectorAll('.component');
+            components.forEach((component, index) => {
+                component.style.opacity = '0';
+                component.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    component.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    component.style.opacity = '1';
+                    component.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

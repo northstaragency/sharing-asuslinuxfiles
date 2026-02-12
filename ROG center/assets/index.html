@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROG Control Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <style>
+        /* ===================================
+   MODERN ROG CONTROL CENTER STYLES
+   =================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colors */
+    --color-bg: #282F32;
+    --color-surface: #2D3437;
+    --color-surface-elevated: #353C40;
+    --color-surface-raised: #4D474F;
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-border-strong: rgba(255, 255, 255, 0.12);
+    
+    /* Text */
+    --color-text-primary: #F2F5F7;
+    --color-text-secondary: #C7CFD4;
+    --color-text-muted: #8A9299;
+    
+    /* Accent */
+    --color-accent: #7D1416;
+    --color-accent-hover: #C0191F;
+    --color-accent-light: rgba(125, 20, 22, 0.1);
+    --color-danger: #E51E1B;
+    
+    /* Status Colors */
+    --color-success-bg: #1E2A23;
+    --color-success-text: #4CC38A;
+    --color-warning-bg: #2A2614;
+    --color-warning-text: #F5D90A;
+    --color-danger-bg: #2B1A1A;
+    --color-danger-text: #E51E1B;
+    
+    /* Spacing */
+    --spacing-2xs: 4px;
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 20px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
+    
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-md: 15px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 20px;
+    
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+    
+    /* Focus */
+    --focus-ring: 0 0 0 3px rgba(192, 25, 31, 0.3);
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* ===================================
+   APP HEADER
+   =================================== */
+.app-header {
+    background: linear-gradient(180deg, #2D3437 0%, rgba(45, 52, 55, 0.95) 100%);
+    border-bottom: 1px solid var(--color-border-strong);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+}
+
+.app-header__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.app-logo__icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+    border-radius: var(--radius-sm);
+}
+
+.app-logo__text {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.app-header__right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.mode-switcher {
+    display: flex;
+    background-color: var(--color-surface-elevated);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    gap: 4px;
+}
+
+.mode-switcher__btn {
+    padding: var(--spacing-xs) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+}
+
+.mode-switcher__btn:hover {
+    color: var(--color-text-primary);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mode-switcher__btn--active {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+    color: var(--color-text-primary);
+    box-shadow: 0 2px 8px rgba(125, 20, 22, 0.3);
+}
+
+.header-icon-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.header-icon-btn:hover {
+    background-color: var(--color-surface-elevated);
+    color: var(--color-text-primary);
+}
+
+.header-icon-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+/* ===================================
+   MAIN CONTENT
+   =================================== */
+.main-content {
+    min-height: calc(100vh - 80px);
+}
+
+.content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-2xl);
+}
+
+/* ===================================
+   QUICK ACTIONS BAR
+   =================================== */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.quick-action-card {
+    background: linear-gradient(135deg, var(--color-surface-elevated) 0%, var(--color-surface) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quick-action-card:hover {
+    border-color: var(--color-border-strong);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.quick-action-card__icon {
+    width: 48px;
+    height: 48px;
+    background: var(--color-accent-light);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent-hover);
+    flex-shrink: 0;
+}
+
+.quick-action-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+}
+
+.quick-action-card__label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.quick-action-card__value {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+/* ===================================
+   MAIN GRID
+   =================================== */
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+@media (max-width: 900px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===================================
+   CONTROL SECTION
+   =================================== */
+.control-section {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-section:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-sm);
+}
+
+.control-section--featured {
+    border: 2px solid var(--color-accent);
+    box-shadow: 0 0 24px rgba(125, 20, 22, 0.15);
+}
+
+.control-section--full {
+    grid-column: 1 / -1;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.section-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.section-link {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent-hover);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.section-link:hover {
+    color: var(--color-danger);
+}
+
+.status-badge {
+    padding: var(--spacing-2xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-badge--success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+/* ===================================
+   PROFILE SELECTOR
+   =================================== */
+.profile-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.profile-option {
+    position: relative;
+}
+
+.profile-option__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.profile-option__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    background-color: var(--color-surface-elevated);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+}
+
+.profile-option__label:hover {
+    border-color: var(--color-border-strong);
+    transform: translateY(-2px);
+}
+
+.profile-option--active .profile-option__label {
+    background: linear-gradient(135deg, rgba(125, 20, 22, 0.15) 0%, rgba(125, 20, 22, 0.05) 100%);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 20px rgba(125, 20, 22, 0.2);
+}
+
+.profile-option__icon {
+    width: 56px;
+    height: 56px;
+    background: var(--color-accent-light);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent-hover);
+}
+
+.profile-option--active .profile-option__icon {
+    background: var(--color-accent);
+    color: white;
+}
+
+.profile-option__name {
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.profile-option__desc {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    line-height: 1.4;
+}
+
+/* ===================================
+   PRIMARY BUTTON
+   =================================== */
+.btn-primary {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(125, 20, 22, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(125, 20, 22, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+/* ===================================
+   OPTION LIST
+   =================================== */
+.option-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-surface-elevated);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option-item:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-raised);
+}
+
+.option-item--selected {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, rgba(125, 20, 22, 0.1) 0%, transparent 100%);
+}
+
+.option-item__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.option-item__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+}
+
+.option-item__name {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.option-item__desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.option-item__indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border-strong);
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.option-item--selected .option-item__indicator {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+}
+
+.option-item--selected .option-item__indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* ===================================
+   FAN CONTROLS
+   =================================== */
+.fan-preset {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.fan-preset__btn {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background-color: var(--color-surface-elevated);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.fan-preset__btn:hover {
+    border-color: var(--color-border-strong);
+    color: var(--color-text-primary);
+}
+
+.fan-preset__btn--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+}
+
+.sensor-readings {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.sensor-reading {
+    background-color: var(--color-surface-elevated);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+}
+
+.sensor-reading__label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-2xs);
+}
+
+.sensor-reading__value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.sensor-reading__unit {
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    color: var(--color-text-secondary);
+}
+
+/* ===================================
+   BATTERY SETTINGS
+   =================================== */
+.battery-settings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.setting-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.battery-limit {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.battery-limit__btn {
+    flex: 1;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    background-color: var(--color-surface-elevated);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.battery-limit__btn:hover {
+    border-color: var(--color-border-strong);
+}
+
+.battery-limit__btn--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+}
+
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+}
+
+.toggle-switch__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch__slider {
+    width: 48px;
+    height: 26px;
+    background-color: var(--color-surface-raised);
+    border-radius: 13px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.toggle-switch__slider::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-switch__input:checked + .toggle-switch__slider {
+    background: var(--color-accent);
+}
+
+.toggle-switch__input:checked + .toggle-switch__slider::after {
+    transform: translateX(22px);
+}
+
+.toggle-switch__label {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background-color: rgba(77, 195, 138, 0.08);
+    border-left: 3px solid var(--color-success-text);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.info-box svg {
+    flex-shrink: 0;
+    color: var(--color-success-text);
+    margin-top: 2px;
+}
+
+/* ===================================
+   LIGHTING CONTROLS
+   =================================== */
+.lighting-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.toggle-switch--large {
+    padding: var(--spacing-md);
+    background-color: var(--color-surface-elevated);
+    border-radius: var(--radius-md);
+}
+
+.brightness-control {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.brightness-control__label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.brightness-control__slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.brightness-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(to right, var(--color-accent) 0%, var(--color-accent) 75%, var(--color-surface-raised) 75%, var(--color-surface-raised) 100%);
+    border-radius: 3px;
+    outline: none;
+}
+
+.brightness-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 3px solid var(--color-accent);
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brightness-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 3px solid var(--color-accent);
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brightness-control__value {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    min-width: 45px;
+    text-align: right;
+}
+
+/* ===================================
+   ACTIVITY FEED
+   =================================== */
+.activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background-color: var(--color-surface-elevated);
+    border-radius: var(--radius-sm);
+}
+
+.activity-item__time {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    min-width: 50px;
+}
+
+.activity-item__content {
+    flex: 1;
+}
+
+.activity-item__action {
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+}
+
+.activity-badge {
+    padding: var(--spacing-2xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.activity-badge--success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+.activity-badge--warning {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: var(--spacing-md);
+    }
+    
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .profile-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .sensor-readings {
+        grid-template-columns: 1fr;
+    }
+}
+
+    </style>
+</head>
+<body>
+    
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="app-header__container">
+            <div class="app-header__left">
+                <div class="app-logo">
+                    <div class="app-logo__icon"></div>
+                    <span class="app-logo__text">ROG Control Center</span>
+                </div>
+            </div>
+            <div class="app-header__right">
+                <div class="mode-switcher">
+                    <button class="mode-switcher__btn mode-switcher__btn--active">Simple</button>
+                    <button class="mode-switcher__btn">Pro</button>
+                </div>
+                <button class="header-icon-btn" aria-label="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"/>
+                    </svg>
+                </button>
+                <button class="header-icon-btn" aria-label="Help">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <circle cx="12" cy="17" r=".5" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            
+            <!-- Quick Actions Bar -->
+            <div class="quick-actions">
+                <div class="quick-action-card">
+                    <div class="quick-action-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <div class="quick-action-card__content">
+                        <span class="quick-action-card__label">Current Profile</span>
+                        <span class="quick-action-card__value">Balanced</span>
+                    </div>
+                </div>
+                
+                <div class="quick-action-card">
+                    <div class="quick-action-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <rect x="9" y="9" width="6" height="6"/>
+                        </svg>
+                    </div>
+                    <div class="quick-action-card__content">
+                        <span class="quick-action-card__label">GPU Mode</span>
+                        <span class="quick-action-card__value">iGPU</span>
+                    </div>
+                </div>
+                
+                <div class="quick-action-card">
+                    <div class="quick-action-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="6" width="18" height="12" rx="2"/>
+                            <path d="M23 13h-4"/>
+                        </svg>
+                    </div>
+                    <div class="quick-action-card__content">
+                        <span class="quick-action-card__label">Battery Cap</span>
+                        <span class="quick-action-card__value">80%</span>
+                    </div>
+                </div>
+                
+                <div class="quick-action-card">
+                    <div class="quick-action-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                    </div>
+                    <div class="quick-action-card__content">
+                        <span class="quick-action-card__label">System Temp</span>
+                        <span class="quick-action-card__value">54°C</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="main-grid">
+                
+                <!-- Performance Profile Section -->
+                <section class="control-section control-section--featured">
+                    <div class="section-header">
+                        <h2 class="section-title">Performance Profile</h2>
+                        <span class="status-badge status-badge--success">Active</span>
+                    </div>
+                    
+                    <div class="profile-selector">
+                        <div class="profile-option">
+                            <input type="radio" id="profile-silent" name="profile" value="silent" class="profile-option__input">
+                            <label for="profile-silent" class="profile-option__label">
+                                <div class="profile-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M17 7l-5 5-5-5"/>
+                                    </svg>
+                                </div>
+                                <span class="profile-option__name">Silent</span>
+                                <span class="profile-option__desc">Minimal noise, reduced performance</span>
+                            </label>
+                        </div>
+                        
+                        <div class="profile-option profile-option--active">
+                            <input type="radio" id="profile-balanced" name="profile" value="balanced" checked class="profile-option__input">
+                            <label for="profile-balanced" class="profile-option__label">
+                                <div class="profile-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M7 7l5 5 5-5M7 17l5-5 5 5"/>
+                                    </svg>
+                                </div>
+                                <span class="profile-option__name">Balanced</span>
+                                <span class="profile-option__desc">Auto-adjusts for daily use</span>
+                            </label>
+                        </div>
+                        
+                        <div class="profile-option">
+                            <input type="radio" id="profile-performance" name="profile" value="performance" class="profile-option__input">
+                            <label for="profile-performance" class="profile-option__label">
+                                <div class="profile-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M7 17l5-5 5 5"/>
+                                    </svg>
+                                </div>
+                                <span class="profile-option__name">Performance</span>
+                                <span class="profile-option__desc">Maximum speed, higher fan noise</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary">Apply Profile</button>
+                </section>
+
+                <!-- GPU Mode Section -->
+                <section class="control-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Graphics Mode</h2>
+                    </div>
+                    
+                    <div class="option-list">
+                        <label class="option-item option-item--selected">
+                            <input type="radio" name="gpu" value="igpu" checked class="option-item__input">
+                            <div class="option-item__content">
+                                <span class="option-item__name">Integrated GPU</span>
+                                <span class="option-item__desc">Power efficient, longer battery life</span>
+                            </div>
+                            <div class="option-item__indicator"></div>
+                        </label>
+                        
+                        <label class="option-item">
+                            <input type="radio" name="gpu" value="hybrid" class="option-item__input">
+                            <div class="option-item__content">
+                                <span class="option-item__name">Hybrid Mode</span>
+                                <span class="option-item__desc">Switches between iGPU and dGPU</span>
+                            </div>
+                            <div class="option-item__indicator"></div>
+                        </label>
+                        
+                        <label class="option-item">
+                            <input type="radio" name="gpu" value="dgpu" class="option-item__input">
+                            <div class="option-item__content">
+                                <span class="option-item__name">Dedicated GPU</span>
+                                <span class="option-item__desc">Maximum performance, higher power draw</span>
+                            </div>
+                            <div class="option-item__indicator"></div>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Fan Control Section -->
+                <section class="control-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Fan Control</h2>
+                        <a href="#" class="section-link">Edit Curve</a>
+                    </div>
+                    
+                    <div class="fan-preset">
+                        <button class="fan-preset__btn">Quiet</button>
+                        <button class="fan-preset__btn fan-preset__btn--active">Balanced</button>
+                        <button class="fan-preset__btn">Turbo</button>
+                    </div>
+                    
+                    <div class="sensor-readings">
+                        <div class="sensor-reading">
+                            <div class="sensor-reading__label">CPU Temperature</div>
+                            <div class="sensor-reading__value">54<span class="sensor-reading__unit">°C</span></div>
+                        </div>
+                        <div class="sensor-reading">
+                            <div class="sensor-reading__label">GPU Temperature</div>
+                            <div class="sensor-reading__value">48<span class="sensor-reading__unit">°C</span></div>
+                        </div>
+                        <div class="sensor-reading">
+                            <div class="sensor-reading__label">Left Fan</div>
+                            <div class="sensor-reading__value">2400<span class="sensor-reading__unit">RPM</span></div>
+                        </div>
+                        <div class="sensor-reading">
+                            <div class="sensor-reading__label">Right Fan</div>
+                            <div class="sensor-reading__value">2380<span class="sensor-reading__unit">RPM</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Battery Care Section -->
+                <section class="control-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Battery Care</h2>
+                    </div>
+                    
+                    <div class="battery-settings">
+                        <div class="setting-group">
+                            <label class="setting-label">Charge Limit</label>
+                            <div class="battery-limit">
+                                <button class="battery-limit__btn battery-limit__btn--active">80%</button>
+                                <button class="battery-limit__btn">90%</button>
+                                <button class="battery-limit__btn">100%</button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="toggle-switch__input">
+                                <span class="toggle-switch__slider"></span>
+                                <span class="toggle-switch__label">Charge to 100% once</span>
+                            </label>
+                        </div>
+                        
+                        <div class="info-box">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                            <span>Protects battery longevity; cap persists until changed</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RGB Lighting Section -->
+                <section class="control-section">
+                    <div class="section-header">
+                        <h2 class="section-title">RGB Lighting</h2>
+                        <a href="#" class="section-link">Advanced</a>
+                    </div>
+                    
+                    <div class="lighting-controls">
+                        <label class="toggle-switch toggle-switch--large">
+                            <input type="checkbox" class="toggle-switch__input" checked>
+                            <span class="toggle-switch__slider"></span>
+                            <span class="toggle-switch__label">Keyboard Lighting</span>
+                        </label>
+                        
+                        <div class="brightness-control">
+                            <label class="brightness-control__label">Brightness</label>
+                            <div class="brightness-control__slider-wrapper">
+                                <input type="range" class="brightness-slider" min="0" max="100" value="75">
+                                <span class="brightness-control__value">75%</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Activity Feed Section -->
+                <section class="control-section control-section--full">
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Activity</h2>
+                        <a href="#" class="section-link">View All</a>
+                    </div>
+                    
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <div class="activity-item__time">14:23</div>
+                            <div class="activity-item__content">
+                                <span class="activity-item__action">Profile changed to Balanced</span>
+                            </div>
+                            <span class="activity-badge activity-badge--success">Applied</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-item__time">12:05</div>
+                            <div class="activity-item__content">
+                                <span class="activity-item__action">GPU mode switched to iGPU</span>
+                            </div>
+                            <span class="activity-badge activity-badge--warning">Reboot Required</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-item__time">09:34</div>
+                            <div class="activity-item__content">
+                                <span class="activity-item__action">Fan curve updated</span>
+                            </div>
+                            <span class="activity-badge activity-badge--success">Applied</span>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
